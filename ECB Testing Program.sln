@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECB Testing Program", "ECB Testing Program\ECB Testing Program.csproj", "{198B1A8A-CC18-4FAF-B44E-2654CF653FDA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{198B1A8A-CC18-4FAF-B44E-2654CF653FDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{198B1A8A-CC18-4FAF-B44E-2654CF653FDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{198B1A8A-CC18-4FAF-B44E-2654CF653FDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{198B1A8A-CC18-4FAF-B44E-2654CF653FDA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1042A38A-EA55-413F-BCB7-58BB16EFB82C}
+	EndGlobalSection
+EndGlobal
