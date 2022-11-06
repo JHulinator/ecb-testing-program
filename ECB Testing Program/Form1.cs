@@ -66,6 +66,8 @@ namespace ECB_Testing_Program
 
         int currentCaliprationRow;
 
+        int currentNumeric;
+
         public me()
         {
             // TODO: Remove after testing
@@ -76,6 +78,7 @@ namespace ECB_Testing_Program
             InitializeComponent();
             
             pnl_calibration.Visible = false;
+            pnl_calibration.BringToFront();
             pnl_nocon.BringToFront();
             bgwColorMe.RunWorkerAsync();
 
@@ -85,7 +88,7 @@ namespace ECB_Testing_Program
             // generator dose not recognize this function
             plot.Plot.Style(ScottPlot.Style.Gray2);
             plot_calibration.Plot.Style(ScottPlot.Style.Gray2);
-            plot.Plot.Frameless();
+            //plot.Plot.Frameless();
             plot_calibration.Plot.Frameless();
             plot.Plot.Palette = ScottPlot.Palette.OneHalfDark;
             plot_calibration.Plot.Palette = ScottPlot.Palette.OneHalfDark;
@@ -116,13 +119,14 @@ namespace ECB_Testing_Program
             btns_calib.Add(btn_calib_tank);
             btns_calib.Add(btn_calib_flow);
 
-            ckbs_calib.Add(ckb_delivery);
-            ckbs_calib.Add(ckb_down);
-            ckbs_calib.Add(ckb_up);
             ckbs_calib.Add(ckb_supply);
+            ckbs_calib.Add(ckb_up);
+            ckbs_calib.Add(ckb_down);
+            ckbs_calib.Add(ckb_delivery);
             ckbs_calib.Add(ckb_flow);
 
             getSavedCalibrations();
+            setSavedNumerics();
            
 
 
@@ -142,6 +146,7 @@ namespace ECB_Testing_Program
             man.Detach += Man_Detach;
             treeView1.Nodes.Clear();
             phidgetTree = new PhidgetTree(treeView1);
+
 
             // TODO: Remove when finished testing
             if (true)
@@ -244,7 +249,15 @@ namespace ECB_Testing_Program
                     {
                         TimeSpan duration = DateTime.Now - startTime;
                         // TODO MVP: Race condition throws Phidget excption there when chanels are closed while trying to check their value. To make this happen you can forc a debug brake during stop press.
-                        pStream.addPoint(v.Voltage, duration.TotalMilliseconds);
+                        try
+                        {
+                            pStream.addPoint(v.Voltage, duration.TotalMilliseconds);
+                        }
+                        catch (PhidgetException ex)
+                        {
+                            Console.WriteLine(ex);
+                        }
+                        
 
                         values[n][pStream.val.Length - 1] = pStream.val.Last();
                         times[n][pStream.t.Length - 1] = pStream.t.Last();
@@ -380,7 +393,7 @@ namespace ECB_Testing_Program
         }
         private void btnStartStop_Click(object sender, EventArgs e)
         {
-            updateStreamsWithCalibration();
+            //updateStreamsWithCalibration();
             Button myButton = (Button)sender;
             // Check to see it there are any points to be saved
             bool hasData = false;
@@ -433,6 +446,7 @@ namespace ECB_Testing_Program
                                 PhidgetStream phgStream = new PhidgetStream(VI, getStreamName(cbx));
                                 phgStream.setUnits("Volts");  // TODO MVP: and meaningful units
                                 all_streams.Add(phgStream);  // Add to list of streams
+                                updateStreamsWithCalibration();
 
                                 values.Add(new double[maxDataCount]);
                                 times.Add(new double[maxDataCount]);
@@ -1519,6 +1533,40 @@ namespace ECB_Testing_Program
 
                 }
             }
+        }
+
+        private void metroSetNumeric_MouseDown(object sender, MouseEventArgs e)
+        {
+            MetroSetNumeric metroSetNumeric = (MetroSetNumeric)sender;
+            currentNumeric = metroSetNumeric.Value;
+        }
+
+        private void metroSetNumeric_Click(object sender, EventArgs e)
+        {
+            MetroSetNumeric metroSetNumeric = (MetroSetNumeric)sender;
+            metroSetNumeric.Value = currentNumeric;
+            switch (metroSetNumeric.Name)
+            {
+                case "metroSetNumeric1":
+                    Properties.Settings.Default.targetPressure = currentNumeric;
+                    break;
+                case "metroSetNumeric2":
+                    Properties.Settings.Default.supplyTankVol = currentNumeric;
+                    break;
+                case "metroSetNumeric3":
+                    Properties.Settings.Default.deliveryTankVol = currentNumeric;
+                    break;
+                default:
+                    break;
+            }
+
+        }
+
+        private void setSavedNumerics()
+        {
+            metroSetNumeric1.Value = Properties.Settings.Default.targetPressure;
+            metroSetNumeric2.Value = Properties.Settings.Default.supplyTankVol;
+            metroSetNumeric3.Value = Properties.Settings.Default.deliveryTankVol;
         }
     }
 

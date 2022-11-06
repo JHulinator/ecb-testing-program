@@ -190,5 +190,41 @@ namespace ECB_Testing_Program.Properties {
                 this["tab"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int targetPressure {
+            get {
+                return ((int)(this["targetPressure"]));
+            }
+            set {
+                this["targetPressure"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("20")]
+        public int supplyTankVol {
+            get {
+                return ((int)(this["supplyTankVol"]));
+            }
+            set {
+                this["supplyTankVol"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("4")]
+        public int deliveryTankVol {
+            get {
+                return ((int)(this["deliveryTankVol"]));
+            }
+            set {
+                this["deliveryTankVol"] = value;
+            }
+        }
     }
 }
