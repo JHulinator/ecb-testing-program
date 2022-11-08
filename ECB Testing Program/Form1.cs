@@ -67,6 +67,7 @@ namespace ECB_Testing_Program
         int currentCaliprationRow;
 
         int currentNumeric;
+        bool ignoreCellChange = false;
 
         public me()
         {
@@ -1439,19 +1440,21 @@ namespace ECB_Testing_Program
 
         private void btn_save_calibration_Click(object sender, EventArgs e)
         {
-            // TODO: Implament slope save here
             int n = 0;
             foreach(MetroSetCheckBox ckb in ckbs_calib)
             {
                 if (ckb.Checked)
                 {
+                    ignoreCellChange = true;
                     gains[n] = gain;
+                    dgv_setCalibration.Rows[n].Cells[1].Value = gain;
                     offsets[n] = offset;
+                    dgv_setCalibration.Rows[n].Cells[2].Value = offset;
                     btns_calib[n].BackgroundImage = Properties.Resources.enabled_check;
+                    ignoreCellChange = false;
                 }
                 n++;
             }
-            pnl_calibration.Visible = false;
         }
 
         private void setSavedCalibrations()
@@ -1468,6 +1471,8 @@ namespace ECB_Testing_Program
             Properties.Settings.Default.offsets = o;
         }
 
+
+        // This gets the users saved calibration form the Settings
         private void getSavedCalibrations()
         {
             metroSetTabControl2.SelectedIndex = Properties.Settings.Default.tab;
@@ -1501,7 +1506,29 @@ namespace ECB_Testing_Program
                 }
                 
             }
+            ignoreCellChange = true;
+            // Name each row
+            dgv_setCalibration.Rows.Add();
+            dgv_setCalibration.Rows.Add();
+            dgv_setCalibration.Rows.Add();
+            dgv_setCalibration.Rows.Add();
+            dgv_setCalibration.Rows[0].Cells[0].Value = "Supply Tank Sensor";
+            dgv_setCalibration.Rows[1].Cells[0].Value = "Upstream Sensor";
+            dgv_setCalibration.Rows[2].Cells[0].Value = "Downstream Sensor";
+            dgv_setCalibration.Rows[3].Cells[0].Value = "Delivery Tank Sensor";
+            dgv_setCalibration.Rows[4].Cells[0].Value = "Flow Sensor";
+            // Iterage through gains and offsets to update table
+            foreach (var v in gains)
+            {
+                dgv_setCalibration.Rows[v.Key].Cells[1].Value = v.Value;
+            }
+            foreach (var v in offsets)
+            {
+                dgv_setCalibration.Rows[v.Key].Cells[2].Value = v.Value;
+            }
+            ignoreCellChange = false;
         }
+
         private void updateStreamsWithCalibration()
         {
             foreach(PhidgetStream stream in all_streams)
@@ -1568,29 +1595,29 @@ namespace ECB_Testing_Program
             metroSetNumeric2.Value = Properties.Settings.Default.supplyTankVol;
             metroSetNumeric3.Value = Properties.Settings.Default.deliveryTankVol;
         }
+
+        private void dgv_setCalibration_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (!(e.RowIndex == -1) && !ignoreCellChange)
+            {
+                DataGridView dgv = sender as DataGridView;
+                double value = Convert.ToDouble(dgv.Rows[e.RowIndex].Cells[e.ColumnIndex].Value);
+                int row = e.RowIndex;
+                int column = e.ColumnIndex;
+
+                // See if gain or offset is changed
+                if (column == 1)
+                {
+                    gains[row] = value;
+                } 
+                else if (column == 2)
+                {
+                    offsets[row] = value;
+                }
+                updateStreamsWithCalibration();
+                setSavedCalibrations();
+            }
+        }
     }
 
 }
-
-
-//// Iterate throug each clibration btn and if selected change to green
-//if (isSame(p, btn_calib_delivery.Tag as Phidget))
-//{
-//    btn_calib_delivery.BackgroundImage = Properties.Resources.enabled_check;
-//}
-//else if (isSame(p, btn_calib_down.Tag as Phidget))
-//{
-//    btn_calib_down.BackgroundImage = Properties.Resources.enabled_check;
-//}
-//else if (isSame(p, btn_calib_flow.Tag as Phidget))
-//{
-//    btn_calib_flow.BackgroundImage = Properties.Resources.enabled_check;
-//}
-//else if (isSame(p, btn_calib_tank.Tag as Phidget))
-//{
-//    btn_calib_tank.BackgroundImage = Properties.Resources.enabled_check;
-//}
-//else if (isSame(p, btn_calib_up.Tag as Phidget))
-//{
-//    btn_calib_up.BackgroundImage = Properties.Resources.enabled_check;
-//}

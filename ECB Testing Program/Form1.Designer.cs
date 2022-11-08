@@ -33,12 +33,19 @@ namespace ECB_Testing_Program
             System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Node1");
             System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Test node", new System.Windows.Forms.TreeNode[] {
             treeNode1});
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(me));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(me));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             this.ckb_up = new MetroSet_UI.Controls.MetroSetCheckBox();
             this.styleManager1 = new MetroSet_UI.Components.StyleManager();
             this.ckb_down = new MetroSet_UI.Controls.MetroSetCheckBox();
@@ -121,6 +128,10 @@ namespace ECB_Testing_Program
             this.ckb_supply = new MetroSet_UI.Controls.MetroSetCheckBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.btn_calibration = new System.Windows.Forms.Button();
+            this.dgv_setCalibration = new System.Windows.Forms.DataGridView();
+            this.Sensor = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.G = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.m = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btn_save_calibration = new System.Windows.Forms.Button();
             this.btn_close = new System.Windows.Forms.Button();
             this.plot_calibration = new ScottPlot.FormsPlot();
@@ -146,6 +157,7 @@ namespace ECB_Testing_Program
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_calibration)).BeginInit();
             this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_setCalibration)).BeginInit();
             this.SuspendLayout();
             // 
             // ckb_up
@@ -1515,6 +1527,7 @@ namespace ECB_Testing_Program
             // 
             // splitContainer2.Panel2
             // 
+            this.splitContainer2.Panel2.Controls.Add(this.dgv_setCalibration);
             this.splitContainer2.Panel2.Controls.Add(this.btn_save_calibration);
             this.splitContainer2.Panel2.Controls.Add(this.btn_close);
             this.splitContainer2.Panel2.Controls.Add(this.plot_calibration);
@@ -1730,6 +1743,85 @@ namespace ECB_Testing_Program
             this.btn_calibration.UseVisualStyleBackColor = false;
             this.btn_calibration.Click += new System.EventHandler(this.btn_calibration_Click);
             // 
+            // dgv_setCalibration
+            // 
+            this.dgv_setCalibration.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(17)))), ((int)(((byte)(17)))));
+            this.dgv_setCalibration.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgv_setCalibration.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Nirmala UI", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(170)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgv_setCalibration.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            this.dgv_setCalibration.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_setCalibration.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Sensor,
+            this.G,
+            this.m});
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Nirmala UI", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle10.ForeColor = System.Drawing.Color.Gray;
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgv_setCalibration.DefaultCellStyle = dataGridViewCellStyle10;
+            this.dgv_setCalibration.EnableHeadersVisualStyles = false;
+            this.dgv_setCalibration.Location = new System.Drawing.Point(0, 0);
+            this.dgv_setCalibration.Name = "dgv_setCalibration";
+            this.dgv_setCalibration.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
+            dataGridViewCellStyle11.Font = new System.Drawing.Font("Nirmala UI", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle11.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(170)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
+            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgv_setCalibration.RowHeadersDefaultCellStyle = dataGridViewCellStyle11;
+            this.dgv_setCalibration.RowHeadersVisible = false;
+            this.dgv_setCalibration.RowHeadersWidth = 25;
+            dataGridViewCellStyle12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
+            dataGridViewCellStyle12.Font = new System.Drawing.Font("Nirmala UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dgv_setCalibration.RowsDefaultCellStyle = dataGridViewCellStyle12;
+            this.dgv_setCalibration.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dgv_setCalibration.Size = new System.Drawing.Size(301, 138);
+            this.dgv_setCalibration.TabIndex = 3;
+            this.dgv_setCalibration.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_setCalibration_CellValueChanged);
+            // 
+            // Sensor
+            // 
+            dataGridViewCellStyle7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Nirmala UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(170)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
+            this.Sensor.DefaultCellStyle = dataGridViewCellStyle7;
+            this.Sensor.HeaderText = "Sensor";
+            this.Sensor.MaxInputLength = 5;
+            this.Sensor.Name = "Sensor";
+            this.Sensor.ReadOnly = true;
+            // 
+            // G
+            // 
+            dataGridViewCellStyle8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Nirmala UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(170)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
+            this.G.DefaultCellStyle = dataGridViewCellStyle8;
+            this.G.HeaderText = "Gain";
+            this.G.MaxInputLength = 5;
+            this.G.Name = "G";
+            // 
+            // m
+            // 
+            dataGridViewCellStyle9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Nirmala UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(170)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
+            this.m.DefaultCellStyle = dataGridViewCellStyle9;
+            this.m.HeaderText = "Offsett";
+            this.m.MaxInputLength = 5;
+            this.m.Name = "m";
+            // 
             // btn_save_calibration
             // 
             this.btn_save_calibration.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -1791,8 +1883,8 @@ namespace ECB_Testing_Program
             this.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(37)))), ((int)(((byte)(51)))));
             this.ClientSize = new System.Drawing.Size(720, 720);
             this.Controls.Add(this.metroSetControlBox1);
-            this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.pnl_calibration);
+            this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.pnl_nocon);
             this.Font = new System.Drawing.Font("Nirmala UI", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -1845,6 +1937,7 @@ namespace ECB_Testing_Program
             ((System.ComponentModel.ISupportInitialize)(this.dgv_calibration)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_setCalibration)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1938,6 +2031,10 @@ namespace ECB_Testing_Program
         private ScottPlot.FormsPlot plot_calibration;
         private System.Windows.Forms.Button btn_close;
         private System.Windows.Forms.Button btn_save_calibration;
+        private System.Windows.Forms.DataGridView dgv_setCalibration;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Sensor;
+        private System.Windows.Forms.DataGridViewTextBoxColumn G;
+        private System.Windows.Forms.DataGridViewTextBoxColumn m;
     }
 }
 
