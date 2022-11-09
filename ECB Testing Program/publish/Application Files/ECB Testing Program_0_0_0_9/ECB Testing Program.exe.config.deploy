@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+    <configSections>
+        <sectionGroup name="userSettings" type="System.Configuration.UserSettingsGroup, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" >
+            <section name="ECB_Testing_Program.Properties.Settings" type="System.Configuration.ClientSettingsSection, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" allowExeDefinition="MachineToLocalUser" requirePermission="false" />
+        </sectionGroup>
+    </configSections>
+    <startup> 
+        <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.7.2" />
+    </startup>
+  <runtime>
+    <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+      <dependentAssembly>
+        <assemblyIdentity name="Syncfusion.Licensing" publicKeyToken="632609b4d040f6b4" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-20.3460.0.48" newVersion="20.3460.0.48" />
+      </dependentAssembly>
+    </assemblyBinding>
+  </runtime>
+  <userSettings>
+    <ECB_Testing_Program.Properties.Settings>
+      <setting name="IsECB" serializeAs="String">
+        <value>True</value>
+      </setting>
+      <setting name="defaultSaveDir" serializeAs="String">
+        <value>"C:\"</value>
+      </setting>
+      <setting name="supplyTankPressure" serializeAs="String">
+        <value />
+      </setting>
+      <setting name="downstreamPressure" serializeAs="String">
+        <value />
+      </setting>
+      <setting name="upstreamPressure" serializeAs="String">
+        <value />
+      </setting>
+      <setting name="flow" serializeAs="String">
+        <value />
+      </setting>
+      <setting name="deliveryTankPressure" serializeAs="String">
+        <value />
+      </setting>
+      <setting name="updtreamSolinoid" serializeAs="String">
+        <value />
+      </setting>
+      <setting name="downstreamSolinoid" serializeAs="String">
+        <value />
+      </setting>
+      <setting name="ecbVentSolinoid" serializeAs="String">
+        <value />
+      </setting>
+      <setting name="tankVentSolinoid" serializeAs="String">
+        <value />
+      </setting>
+      <setting name="gains" serializeAs="String">
+        <value>1,1,1,1,1</value>
+      </setting>
+      <setting name="offsets" serializeAs="String">
+        <value>0,0,0,0,0</value>
+      </setting>
+      <setting name="tab" serializeAs="String">
+        <value>0</value>
+      </setting>
+      <setting name="targetPressure" serializeAs="String">
+        <value>100</value>
+      </setting>
+      <setting name="supplyTankVol" serializeAs="String">
+        <value>20</value>
+      </setting>
+      <setting name="deliveryTankVol" serializeAs="String">
+        <value>4</value>
+      </setting>
+    </ECB_Testing_Program.Properties.Settings>
+  </userSettings>
+</configuration>

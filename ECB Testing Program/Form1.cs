@@ -26,6 +26,7 @@ using System.Threading;
 using MetroSet_UI.Controls;
 using System.Security.Cryptography;
 using Phidget22.Events;
+using ScottPlot.Drawing.Colormaps;
 
 namespace ECB_Testing_Program
 {
@@ -114,10 +115,10 @@ namespace ECB_Testing_Program
             outChannels.Add(cbxECBvent);
             outChannels.Add(cbxTankVent);
 
-            btns_calib.Add(btn_calib_delivery);
-            btns_calib.Add(btn_calib_down);
-            btns_calib.Add(btn_calib_up);
             btns_calib.Add(btn_calib_tank);
+            btns_calib.Add(btn_calib_up);
+            btns_calib.Add(btn_calib_down);
+            btns_calib.Add(btn_calib_delivery);
             btns_calib.Add(btn_calib_flow);
 
             ckbs_calib.Add(ckb_supply);
@@ -249,16 +250,32 @@ namespace ECB_Testing_Program
                     if (isSame(v, pStream.phidget)) // Identify what stream has changed voltage
                     {
                         TimeSpan duration = DateTime.Now - startTime;
-                        // TODO MVP: Race condition throws Phidget excption there when chanels are closed while trying to check their value. To make this happen you can forc a debug brake during stop press.
                         try
                         {
-                            pStream.addPoint(v.Voltage, duration.TotalMilliseconds);
+                            pStream.addPoint(v.Voltage, duration.TotalSeconds);
                         }
                         catch (PhidgetException ex)
                         {
                             Console.WriteLine(ex);
                         }
-                        
+
+                        // determain if target voltage or time
+                        if (rbnITP.Checked || rbnDTP.Checked)
+                        {
+                            // Check to see if pressure is reached
+                            if ((pStream.val.Last() > metroSetNumeric1.Value) && swcECBsolenoid.Switched)
+                            {
+                                swcECBsolenoid.Switched = false;
+                            }
+                        }
+                        else
+                        {
+                            // Check to see if time is reached
+                            if (pStream.t.Last() > metroSetNumeric1.Value)
+                            {
+                                swcECBsolenoid.Switched = false;
+                            }
+                        }
 
                         values[n][pStream.val.Length - 1] = pStream.val.Last();
                         times[n][pStream.t.Length - 1] = pStream.t.Last();
@@ -836,19 +853,19 @@ namespace ECB_Testing_Program
                             TimeSpan duration = DateTime.Now - startTime;
                             if (p.State)
                             {
-                                pStream.addPoint(0, duration.TotalMilliseconds);
+                                pStream.addPoint(0, duration.TotalSeconds);
                                 values[n][pStream.val.Length - 1] = pStream.val.Last();
                                 times[n][pStream.t.Length - 1] = pStream.t.Last();
-                                pStream.addPoint(1, duration.TotalMilliseconds+1);
+                                pStream.addPoint(1, duration.TotalSeconds+1);
                                 values[n][pStream.val.Length - 1] = pStream.val.Last();
                                 times[n][pStream.t.Length - 1] = pStream.t.Last();
                             }
                             else
                             {
-                                pStream.addPoint(1, duration.TotalMilliseconds);
+                                pStream.addPoint(1, duration.TotalSeconds);
                                 values[n][pStream.val.Length - 1] = pStream.val.Last();
                                 times[n][pStream.t.Length - 1] = pStream.t.Last();
-                                pStream.addPoint(0, duration.TotalMilliseconds+1);
+                                pStream.addPoint(0, duration.TotalSeconds+1);
                                 values[n][pStream.val.Length - 1] = pStream.val.Last();
                                 times[n][pStream.t.Length - 1] = pStream.t.Last();
                             }
@@ -928,27 +945,31 @@ namespace ECB_Testing_Program
                 }
             }
 
-            string supplyPressure="";
-            string axelPressure = "";
+            string supplyPressure="XXX";
+            string axelPressure = "XXX";
             foreach(PhidgetStream phidgetStream in all_streams)
             {
                 if (phidgetStream.getName() == "Supply Tank Presure")
                 {
                     int startPressure = (int)phidgetStream.getValues()[0];
                     supplyPressure = startPressure.ToString();
+                    supplyPressure = paddThreeDig(supplyPressure);
                 } else if(phidgetStream.getName() == "Delivery Tank Pressure")
                 {
                     int sdp = (int)phidgetStream.getValues()[0];
                     axelPressure = sdp.ToString();
+                    axelPressure = paddThreeDig(axelPressure);
                 }
             }
 
             // Add starting supply presure
-            str_return += paddThreeDig(supplyPressure) + "_";
+            str_return += supplyPressure + "_";
             // Add starting dilivery tank pressure
-            str_return += paddThreeDig(axelPressure) + "_";
-            // Ass target time or pressure
+            str_return += axelPressure + "_";
+            // Add target time or pressure
             str_return += paddThreeDig(metroSetNumeric1.Value.ToString()) + "_";
+            // Add axle volume
+            str_return += paddTwoDig(metroSetNumeric3.Value.ToString()) + "_";
             // Add Month
             str_return += paddTwoDig(startTime.Date.Month.ToString()) + "-";
             str_return += paddTwoDig(startTime.Date.Day.ToString()) + "-";

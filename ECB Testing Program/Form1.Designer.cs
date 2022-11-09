@@ -129,13 +129,13 @@ namespace ECB_Testing_Program
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.btn_calibration = new System.Windows.Forms.Button();
             this.dgv_setCalibration = new System.Windows.Forms.DataGridView();
-            this.Sensor = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.G = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.m = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btn_save_calibration = new System.Windows.Forms.Button();
             this.btn_close = new System.Windows.Forms.Button();
             this.plot_calibration = new ScottPlot.FormsPlot();
             this.tlt_calibration = new MetroSet_UI.Components.MetroSetSetToolTip();
+            this.Sensor = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.G = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.m = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnl_nocon.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pic_nocon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -1791,37 +1791,6 @@ namespace ECB_Testing_Program
             this.dgv_setCalibration.TabIndex = 3;
             this.dgv_setCalibration.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_setCalibration_CellValueChanged);
             // 
-            // Sensor
-            // 
-            dataGridViewCellStyle7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Nirmala UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(170)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
-            this.Sensor.DefaultCellStyle = dataGridViewCellStyle7;
-            this.Sensor.HeaderText = "Sensor";
-            this.Sensor.MaxInputLength = 5;
-            this.Sensor.Name = "Sensor";
-            this.Sensor.ReadOnly = true;
-            // 
-            // G
-            // 
-            dataGridViewCellStyle8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Nirmala UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(170)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
-            this.G.DefaultCellStyle = dataGridViewCellStyle8;
-            this.G.HeaderText = "Gain";
-            this.G.MaxInputLength = 5;
-            this.G.Name = "G";
-            // 
-            // m
-            // 
-            dataGridViewCellStyle9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Nirmala UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(170)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
-            this.m.DefaultCellStyle = dataGridViewCellStyle9;
-            this.m.HeaderText = "Offsett";
-            this.m.MaxInputLength = 5;
-            this.m.Name = "m";
-            // 
             // btn_save_calibration
             // 
             this.btn_save_calibration.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -1875,6 +1844,37 @@ namespace ECB_Testing_Program
             this.tlt_calibration.ThemeAuthor = "Narwin";
             this.tlt_calibration.ThemeName = "MetroLite";
             // 
+            // Sensor
+            // 
+            dataGridViewCellStyle7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Nirmala UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(170)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
+            this.Sensor.DefaultCellStyle = dataGridViewCellStyle7;
+            this.Sensor.HeaderText = "Sensor";
+            this.Sensor.MaxInputLength = 100;
+            this.Sensor.Name = "Sensor";
+            this.Sensor.ReadOnly = true;
+            // 
+            // G
+            // 
+            dataGridViewCellStyle8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Nirmala UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(170)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
+            this.G.DefaultCellStyle = dataGridViewCellStyle8;
+            this.G.HeaderText = "Gain";
+            this.G.MaxInputLength = 100;
+            this.G.Name = "G";
+            // 
+            // m
+            // 
+            dataGridViewCellStyle9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Nirmala UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(170)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
+            this.m.DefaultCellStyle = dataGridViewCellStyle9;
+            this.m.HeaderText = "Offsett";
+            this.m.MaxInputLength = 100;
+            this.m.Name = "m";
+            // 
             // me
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -1883,8 +1883,8 @@ namespace ECB_Testing_Program
             this.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(37)))), ((int)(((byte)(51)))));
             this.ClientSize = new System.Drawing.Size(720, 720);
             this.Controls.Add(this.metroSetControlBox1);
-            this.Controls.Add(this.pnl_calibration);
             this.Controls.Add(this.splitContainer1);
+            this.Controls.Add(this.pnl_calibration);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.pnl_nocon);
             this.Font = new System.Drawing.Font("Nirmala UI", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
