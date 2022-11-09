@@ -262,8 +262,8 @@ namespace ECB_Testing_Program
                         // determain if target voltage or time
                         if (rbnITP.Checked || rbnDTP.Checked)
                         {
-                            // Check to see if pressure is reached
-                            if ((pStream.val.Last() > metroSetNumeric1.Value) && swcECBsolenoid.Switched)
+                            // Check to see if pressure is reached on the delivery tank pressure
+                            if ((pStream.getName() == "Delivery Tank Pressure") && (pStream.val.Last() > metroSetNumeric1.Value) && swcECBsolenoid.Switched)
                             {
                                 swcECBsolenoid.Switched = false;
                             }
