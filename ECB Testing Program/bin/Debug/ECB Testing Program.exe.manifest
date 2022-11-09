@@ -44,14 +44,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ECB Testing Program.exe" size="584176">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ECB Testing Program.exe" size="585200">
       <assemblyIdentity name="ECB Testing Program" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>btYG3QMzvx+j2pEDdOc6KWk5K8ug3yIElZpAyG0hkXo=</dsig:DigestValue>
+        <dsig:DigestValue>sooeQO+v3xiBljCjk6KHzfHI30r1FqBzvXKnq06hBTQ=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

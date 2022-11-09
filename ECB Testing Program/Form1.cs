@@ -63,12 +63,13 @@ namespace ECB_Testing_Program
         
 
         int maxDataCount = 2000;
-        bool ignoreVoltageChange = false;
+        bool ignoreVoltageChange = true;
 
-        int currentCaliprationRow;
+        int currentCalibrationRow;
 
         int currentNumeric;
         bool ignoreCellChange = false;
+        bool hasVoltageListener = false;
 
         public me()
         {
@@ -91,7 +92,7 @@ namespace ECB_Testing_Program
             plot.Plot.Style(ScottPlot.Style.Gray2);
             plot_calibration.Plot.Style(ScottPlot.Style.Gray2);
             //plot.Plot.Frameless();
-            plot_calibration.Plot.Frameless();
+            //plot_calibration.Plot.Frameless();
             plot.Plot.Palette = ScottPlot.Palette.OneHalfDark;
             plot_calibration.Plot.Palette = ScottPlot.Palette.OneHalfDark;
 
@@ -151,7 +152,7 @@ namespace ECB_Testing_Program
 
 
             // TODO: Remove when finished testing
-            if (true)
+            if (false)
             {
                 pictureBox1.Image = null;
             }
@@ -239,54 +240,78 @@ namespace ECB_Testing_Program
         //
         // This event fires when a vlotage input changes
         //
-        private void voltageChange(object sender, Phidget22.Events.VoltageInputVoltageChangeEventArgs e)
+        private void voltageChange(object sender, VoltageInputVoltageChangeEventArgs e)
         {
             if (!ignoreVoltageChange)
             {
+                // Get the sender as voltageInput
                 VoltageInput v = (VoltageInput)sender;
+                double voltage;
+                // get the time and value of the change event
+                try
+                {
+                    voltage = v.Voltage;
+                }
+                catch (PhidgetException ex)
+                {
+                    Console.WriteLine(ex);
+                    return;
+                }
+                TimeSpan duration = DateTime.Now - startTime;
                 int n = 0;
                 foreach (PhidgetStream pStream in all_streams)
                 {
-                    if (isSame(v, pStream.phidget)) // Identify what stream has changed voltage
+                    bool ignore = false;
+                    if (pStream.phidget.ChannelClass == ChannelClass.VoltageInput)
                     {
-                        TimeSpan duration = DateTime.Now - startTime;
-                        try
+                        if (isSame(v, pStream.phidget)) // Identify what stream has changed voltage
                         {
-                            pStream.addPoint(v.Voltage, duration.TotalSeconds);
-                        }
-                        catch (PhidgetException ex)
-                        {
-                            Console.WriteLine(ex);
-                        }
-
-                        // determain if target voltage or time
-                        if (rbnITP.Checked || rbnDTP.Checked)
-                        {
-                            // Check to see if pressure is reached on the delivery tank pressure
-                            if ((pStream.getName() == "Delivery Tank Pressure") && (pStream.val.Last() > metroSetNumeric1.Value) && swcECBsolenoid.Switched)
-                            {
-                                swcECBsolenoid.Switched = false;
-                            }
+                            pStream.addPoint(voltage, duration.TotalSeconds);
                         }
                         else
                         {
-                            // Check to see if time is reached
-                            if (pStream.t.Last() > metroSetNumeric1.Value)
+                            try
                             {
-                                swcECBsolenoid.Switched = false;
+                                VoltageInput thisVI = pStream.phidget as VoltageInput;
+                                pStream.addPoint(thisVI.Voltage, duration.TotalSeconds);
+                            }
+                            catch (PhidgetException ex)
+                            {
+                                Console.WriteLine(ex);
+                                ignore = true;
                             }
                         }
+                        if (!ignore)
+                        {
+                            // determain if target voltage or time
+                            if (rbnITP.Checked || rbnDTP.Checked)
+                            {
+                                // Check to see if pressure is reached on the delivery tank pressure
+                                if ((pStream.getName() == "Delivery Tank Pressure") && (pStream.val.Last() > metroSetNumeric1.Value) && swcECBsolenoid.Switched)
+                                {
+                                    swcECBsolenoid.Switched = false;
+                                }
+                            }
+                            else
+                            {
+                                // Check to see if time is reached
+                                if (pStream.t.Last() > metroSetNumeric1.Value)
+                                {
+                                    swcECBsolenoid.Switched = false;
+                                }
+                            }
 
-                        values[n][pStream.val.Length - 1] = pStream.val.Last();
-                        times[n][pStream.t.Length - 1] = pStream.t.Last();
+                            values[n][pStream.val.Length - 1] = pStream.val.Last();
+                            times[n][pStream.t.Length - 1] = pStream.t.Last();
 
 
-                        // Refresh the plot
-                        int maxPlotIndex = pStream.val.Length - 1;
+                            // Refresh the plot
+                            int maxPlotIndex = pStream.val.Length - 1;
 
-                        signalPlots[n].MaxRenderIndex = maxPlotIndex;
-                        plot.Plot.AxisAuto();
-                        plot.Render();
+                            signalPlots[n].MaxRenderIndex = maxPlotIndex;
+                            plot.Plot.AxisAuto();
+                            plot.Render();
+                        }
                     }
                     n++;
                 }
@@ -456,8 +481,15 @@ namespace ECB_Testing_Program
                         Phidget p = phidgets[cbx.SelectedIndex]; // Get the phidget that is selected
                         if (p.ChannelClass == ChannelClass.VoltageInput) // Ignore phidgets that are not Voltage inputs
                         {
+                            /*
                             if (!p.IsOpen) // Check if the chanel is already open
                             {
+                                
+                                 * This portion of code origionaly served to create streams and open channels when the start button
+                                 * was selected. This activity has been moved to run when the coombo box selection is first made
+                                 * because we first check if the phidget channel is open, this code will likly never run. Only in
+                                 * in the event that the chanel faild to oppen the first time will it try again here
+                                 
                                 VoltageInput VI = (VoltageInput)p;  // Create Voltage input channel form selected phidget
 
                                 // Create a phidget stream
@@ -481,14 +513,17 @@ namespace ECB_Testing_Program
 
                                 VI.Open(1000);
                                 VI.DataInterval = dataInterval;
+                                
+                            }
+                            */
+                            // Find if this is the first one
+                            if (startTime == DateTime.MinValue)
+                            {
+                                startTime = DateTime.Now;
+                                ignoreVoltageChange = false;
                             }
                         }
-                        // Find if this is the first one
-                        if (startTime == DateTime.MinValue)
-                        {
-                            startTime = DateTime.Now;
-                            ignoreVoltageChange = false;
-                        }
+
                     }
                 }
             }
@@ -711,6 +746,8 @@ namespace ECB_Testing_Program
             
         }
 
+
+
         private void cbx_SelectedIndexChanged(object sender, EventArgs e)
         {
 
@@ -756,7 +793,95 @@ namespace ECB_Testing_Program
                 default:
                     break;
             }
+
+            if (p != null && p.ChannelClass == ChannelClass.VoltageInput)
+            {
+                VoltageInput VI = (VoltageInput)p;  // Create Voltage input channel form selected phidget
+
+                // Create a phidget stream
+                PhidgetStream phgStream = new PhidgetStream(VI, getStreamName(cbx));
+                phgStream.setUnits("Volts");  // TODO MVP: and meaningful units
+                all_streams.Add(phgStream);  // Add to list of streams
+                updateStreamsWithCalibration();
+
+                values.Add(new double[maxDataCount]);
+                times.Add(new double[maxDataCount]);
+
+
+                // Add stream to plots
+                ScottPlot.Plottable.SignalPlotXY sp = new ScottPlot.Plottable.SignalPlotXY();
+                sp = plot.Plot.AddSignalXY(times.Last(), values.Last());
+                sp.Label = phgStream.getName();
+                signalPlots.Add(sp);
+
+                // Add event handelers for the first one that is attached
+                if (!hasVoltageListener)
+                {
+                    VI.VoltageChange += voltageChange;
+                    hasVoltageListener = true;
+                }
+                
+                VI.Attach += VI_Attach;
+
+                VI.Open();
+                //Thread threadOpenPhidget = new Thread(openMethod);
+                //threadOpenPhidget.Start(all_streams);
+                //if (bgw_phidget_open.IsBusy)
+                //{
+                //    bgw_phidget_open.CancelAsync();
+                //    bgw_phidget_open.RunWorkerAsync(all_streams);
+                //}
+                //else
+                //{
+                //    bgw_phidget_open.RunWorkerAsync(all_streams);
+                //}
+                
+                
+                //VI.DataInterval = dataInterval;
+            } else if (p == null)
+            {
+                foreach (Phidget phidget in phidgets)
+                {
+                    if (phidget.IsOpen)
+                    {
+                        phidget.Close();
+                    }
+                }
+            }
         }
+
+        private void bgw_phidget_open_DoWork(object sender, DoWorkEventArgs e)
+        {
+            List<PhidgetStream> streams = e.Argument as List<PhidgetStream>;
+            foreach (PhidgetStream phidgetStream in all_streams)
+            {
+                if (!phidgetStream.phidget.IsOpen)
+                {
+                    phidgetStream.phidget.Open(1000);
+                    phidgetStream.phidget.DataInterval = dataInterval;
+                    // Console.WriteLine(phidgetStream.getName());
+                    // phidgetStream.phidget.Open();
+                }
+            }
+        }
+
+        private void bgw_phidget_open_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+
+        }
+        private void VI_Attach(object sender, AttachEventArgs e)
+        {
+            // TODO: Add to 
+            Phidget P = sender as Phidget;
+            P.DataInterval = dataInterval;
+            // Console.WriteLine(P.ChannelName);
+        }
+        private void DI_Attach(object sender, AttachEventArgs e)
+        {
+            Phidget P = sender as Phidget;
+            // Console.WriteLine(P.ChannelName);
+        }
+
         private void solinoid_SelectedIndexChanged(object sender, EventArgs e)
         {
             MetroSetComboBox cbx = (MetroSetComboBox)sender;
@@ -830,7 +955,9 @@ namespace ECB_Testing_Program
                 msSwitch.Enabled = true;
                 
                 msSwitch.Tag = p;
-                p.Open(1000);
+                p.Attach += DI_Attach;
+                // TODO: Move this to background worker
+                p.Open();
                 digitalOutputs.Add((DigitalOutput)p);
             } 
         }
@@ -1234,7 +1361,7 @@ namespace ECB_Testing_Program
                     }
                     myButton.Tag = "capture";
                     myButton.BackgroundImage = Properties.Resources.Capture;
-                    currentCaliprationRow = 0;
+                    currentCalibrationRow = 0;
 
                     // Iterate through each ckb and open the phidgets that are selected and open their phidget chanels
                     // Supply
@@ -1293,7 +1420,7 @@ namespace ECB_Testing_Program
 
                 } else if ((string)myButton.Tag == "capture")
                 {
-                    currentCaliprationRow++;
+                    currentCalibrationRow++;
                     //TODO Add caputred values to the plot
                     double[] ys;
                     double[] xs;
@@ -1325,7 +1452,7 @@ namespace ECB_Testing_Program
                             }
                         }
                     }
-                    if (currentCaliprationRow > 1)
+                    if (currentCalibrationRow > 1)
                     {
                         // Remove any perviously added lines
                         plot_calibration.Plot.Clear();
@@ -1342,7 +1469,7 @@ namespace ECB_Testing_Program
 
                         plot_calibration.Plot.AxisAuto();
                         plot_calibration.Render();
-                       if(!(currentCaliprationRow < dgv_calibration.Rows.Count - 1))  // This means the end of calibration has been reached
+                       if(!(currentCalibrationRow < dgv_calibration.Rows.Count - 1))  // This means the end of calibration has been reached
                        {
                             gain = model.slope;
                             offset = model.offset;
@@ -1361,10 +1488,10 @@ namespace ECB_Testing_Program
         private void calibrationVoltageChange(object sender, VoltageInputVoltageChangeEventArgs e)
         {
             VoltageInput voltage = sender as VoltageInput;
-            if (currentCaliprationRow < dgv_calibration.Rows.Count - 1) // Make sure testing should not be ended
+            if (currentCalibrationRow < dgv_calibration.Rows.Count - 1) // Make sure testing should not be ended
             { 
                 // Write the value ov foltage to the girdview
-                DataGridViewRow row = dgv_calibration.Rows[currentCaliprationRow];
+                DataGridViewRow row = dgv_calibration.Rows[currentCalibrationRow];
                 foreach (DataGridViewCell c in row.Cells)
                 {
                     if (c.ColumnIndex != 0) // Skip the first column
