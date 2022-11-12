@@ -53,5 +53,8 @@
     <Setting Name="deliveryTankVol" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">4</Value>
     </Setting>
+    <Setting Name="equation" Type="System.String" Scope="User">
+      <Value Profile="(Default)">= 1.3 * P_d + -0.3 * P_s + 1.5</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

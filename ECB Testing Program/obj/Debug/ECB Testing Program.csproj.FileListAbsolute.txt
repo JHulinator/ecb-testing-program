@@ -41,7 +41,6 @@ C:\Users\J Hulin\Documents\Projects\PSI\ECB_Testing_Program\ECB Testing Program\
 C:\Users\J Hulin\Documents\Projects\PSI\ECB_Testing_Program\ECB Testing Program\bin\Debug\Phidget22.NET.dll
 C:\Users\J Hulin\Documents\Projects\PSI\ECB_Testing_Program\ECB Testing Program\bin\Debug\ScottPlot.dll
 C:\Users\J Hulin\Documents\Projects\PSI\ECB_Testing_Program\ECB Testing Program\bin\Debug\ScottPlot.WinForms.dll
-C:\Users\J Hulin\Documents\Projects\PSI\ECB_Testing_Program\ECB Testing Program\bin\Debug\ScottPlot.WPF.dll
 C:\Users\J Hulin\Documents\Projects\PSI\ECB_Testing_Program\ECB Testing Program\bin\Debug\System.Drawing.Common.dll
 C:\Users\J Hulin\Documents\Projects\PSI\ECB_Testing_Program\ECB Testing Program\bin\Debug\System.Numerics.Vectors.dll
 C:\Users\J Hulin\Documents\Projects\PSI\ECB_Testing_Program\ECB Testing Program\bin\Debug\System.ValueTuple.dll

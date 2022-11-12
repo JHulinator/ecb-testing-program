@@ -1,13 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2">
-  <asmv1:assemblyIdentity name="ECB Testing Program.exe" version="0.0.0.11" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
-  <description asmv2:publisher="J Hulin" asmv2:product="ECB Testing Program" xmlns="urn:schemas-microsoft-com:asm.v1" />
+  <asmv1:assemblyIdentity name="ECB Testing Program.exe" version="0.0.0.16" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="amd64" type="win32" />
   <application />
   <entryPoint>
-    <assemblyIdentity name="ECB Testing Program" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+    <assemblyIdentity name="ECB Testing Program" version="1.0.0.0" language="neutral" processorArchitecture="amd64" />
     <commandLine file="ECB Testing Program.exe" parameters="" />
   </entryPoint>
-  <co.v1:useManifestForTrust xmlns="urn:schemas-microsoft-com:asm.v1" />
   <trustInfo>
     <security>
       <applicationRequestMinimum>
@@ -44,14 +42,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ECB Testing Program.exe" size="585200">
-      <assemblyIdentity name="ECB Testing Program" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ECB Testing Program.exe" size="587264">
+      <assemblyIdentity name="ECB Testing Program" version="1.0.0.0" language="neutral" processorArchitecture="amd64" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>sooeQO+v3xiBljCjk6KHzfHI30r1FqBzvXKnq06hBTQ=</dsig:DigestValue>
+        <dsig:DigestValue>twhNMywzb7WEh+oChofmg0Uya+MIrylWLTAZe9uDSLk=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -80,38 +78,26 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ScottPlot.dll" size="586240">
-      <assemblyIdentity name="ScottPlot" version="4.1.58.0" publicKeyToken="86698DC10387C39E" language="neutral" processorArchitecture="msil" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ScottPlot.dll" size="593408">
+      <assemblyIdentity name="ScottPlot" version="4.1.59.0" publicKeyToken="86698DC10387C39E" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>Tp/qYO6JaHaQefbZj3UbzSt+zhHf6bxgnKBzWpKoPxg=</dsig:DigestValue>
+        <dsig:DigestValue>yHF3oMXO7iiecHJPKrVaHlSetH5Cdjdh2iy6TJP8p6o=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ScottPlot.WinForms.dll" size="48128">
-      <assemblyIdentity name="ScottPlot.WinForms" version="4.1.58.0" publicKeyToken="5DF1DFA5321E734B" language="neutral" processorArchitecture="msil" />
+      <assemblyIdentity name="ScottPlot.WinForms" version="4.1.59.0" publicKeyToken="5DF1DFA5321E734B" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>Wi+Csu6lv4fdVpdl22LVrDOgFsSuq/eDm6M0sjhN6S4=</dsig:DigestValue>
-      </hash>
-    </dependentAssembly>
-  </dependency>
-  <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ScottPlot.WPF.dll" size="41472">
-      <assemblyIdentity name="ScottPlot.WPF" version="4.1.58.0" publicKeyToken="E53B06131E34A3AA" language="neutral" processorArchitecture="msil" />
-      <hash>
-        <dsig:Transforms>
-          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-        </dsig:Transforms>
-        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>nBRTl7qOK0fRlsh/RYgv5W+CZBiQzWiN9YDyjr0zxx8=</dsig:DigestValue>
+        <dsig:DigestValue>NGNkD4VVdOyTGLn7VmLs6JG03Jvyg6PkQiYlzpM7fLc=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -151,13 +137,13 @@
       </hash>
     </dependentAssembly>
   </dependency>
-  <file name="ECB Testing Program.exe.config" size="2898">
+  <file name="ECB Testing Program.exe.config" size="3259">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>RWiK7c1UAjcbvD+qeTVQzCgNU33fcBL0zYXbVxTd2jQ=</dsig:DigestValue>
+      <dsig:DigestValue>07LgqdYIfBXg872OR0Vo6Elwnn6Ul3RoBdRSBKZwiX4=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Resources\PSILogo2019.png" size="66465">

@@ -226,5 +226,17 @@ namespace ECB_Testing_Program.Properties {
                 this["deliveryTankVol"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("= 1.3 * P_d + -0.3 * P_s + 1.5")]
+        public string equation {
+            get {
+                return ((string)(this["equation"]));
+            }
+            set {
+                this["equation"] = value;
+            }
+        }
     }
 }

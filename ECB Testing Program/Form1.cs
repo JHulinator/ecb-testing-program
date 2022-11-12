@@ -62,7 +62,7 @@ namespace ECB_Testing_Program
         Dictionary<int, double> offsets = new Dictionary<int, double>();
         
 
-        int maxDataCount = 2000;
+        int maxDataCount = 6000;
         bool ignoreVoltageChange = true;
 
         int currentCalibrationRow;
@@ -79,6 +79,7 @@ namespace ECB_Testing_Program
             
             // Initialize the user form componaints
             InitializeComponent();
+            txbEquation.Text = Properties.Settings.Default.equation;
             
             pnl_calibration.Visible = false;
             pnl_calibration.BringToFront();
@@ -262,7 +263,7 @@ namespace ECB_Testing_Program
                 foreach (PhidgetStream pStream in all_streams)
                 {
                     bool ignore = false;
-                    if (pStream.phidget.ChannelClass == ChannelClass.VoltageInput)
+                    if (pStream.getName() != "Calculated Tank Pressure" && pStream.phidget.ChannelClass == ChannelClass.VoltageInput)
                     {
                         if (isSame(v, pStream.phidget)) // Identify what stream has changed voltage
                         {
@@ -304,6 +305,37 @@ namespace ECB_Testing_Program
                             values[n][pStream.val.Length - 1] = pStream.val.Last();
                             times[n][pStream.t.Length - 1] = pStream.t.Last();
 
+
+                            // Refresh the plot
+                            int maxPlotIndex = pStream.val.Length - 1;
+
+                            signalPlots[n].MaxRenderIndex = maxPlotIndex;
+                            plot.Plot.AxisAuto();
+                            plot.Render();
+                        }
+                    }
+                    else if(pStream.getName() == "Calculated Tank Pressure")
+                    {
+                        // This case it is the calculated value
+                        if (!ignore)
+                        {
+                            double pd=0;
+                            double ps=0;
+                            foreach(PhidgetStream p in all_streams)
+                            {
+                                if(p.getName() == "Downstream ECB Presure")
+                                {
+                                    pd = p.val.Last();
+                                } else if(p.getName() == "Upstream ECB Pressure")
+                                {
+                                    ps = p.val.Last();
+                                }
+                            }
+                            double[] constants = getEquationValues(txbEquation.Text);
+                            pStream.addCaculatedPoint(duration.TotalSeconds, pd, ps, constants[0], constants[1], constants[2]);
+                            
+                            values[n][pStream.val.Length - 1] = pStream.val.Last();
+                            times[n][pStream.t.Length - 1] = pStream.t.Last();
 
                             // Refresh the plot
                             int maxPlotIndex = pStream.val.Length - 1;
@@ -802,6 +834,7 @@ namespace ECB_Testing_Program
                 PhidgetStream phgStream = new PhidgetStream(VI, getStreamName(cbx));
                 phgStream.setUnits("Volts");  // TODO MVP: and meaningful units
                 all_streams.Add(phgStream);  // Add to list of streams
+
                 updateStreamsWithCalibration();
 
                 values.Add(new double[maxDataCount]);
@@ -810,6 +843,7 @@ namespace ECB_Testing_Program
 
                 // Add stream to plots
                 ScottPlot.Plottable.SignalPlotXY sp = new ScottPlot.Plottable.SignalPlotXY();
+                sp.MarkerShape = ScottPlot.MarkerShape.none;
                 sp = plot.Plot.AddSignalXY(times.Last(), values.Last());
                 sp.Label = phgStream.getName();
                 signalPlots.Add(sp);
@@ -824,20 +858,44 @@ namespace ECB_Testing_Program
                 VI.Attach += VI_Attach;
 
                 VI.Open();
-                //Thread threadOpenPhidget = new Thread(openMethod);
-                //threadOpenPhidget.Start(all_streams);
-                //if (bgw_phidget_open.IsBusy)
-                //{
-                //    bgw_phidget_open.CancelAsync();
-                //    bgw_phidget_open.RunWorkerAsync(all_streams);
-                //}
-                //else
-                //{
-                //    bgw_phidget_open.RunWorkerAsync(all_streams);
-                //}
-                
-                
-                //VI.DataInterval = dataInterval;
+
+                // If there is a stream called upstream and downstream, then add a caculated stream
+                bool isUp = false;
+                bool isDown = false;
+                bool isCalculated = false;
+                PhidgetStream calcStream = null;
+                foreach (PhidgetStream stream in all_streams)
+                {
+                    if (stream.getName() == "Upstream ECB Pressure")
+                    {
+                        calcStream = new PhidgetStream(new Phidget(), "Calculated Tank Pressure");
+                        isUp = true;
+                    }
+                    else if (stream.getName() == "Downstream ECB Presure")
+                    {
+                        isDown = true;
+                    }
+                    else if (stream.getName() == "Calculated Tank Pressure")
+                    {
+                        isCalculated = true;
+                    }
+                }
+                if (!isCalculated && isUp && isDown)
+                {
+                    all_streams.Add(calcStream);
+
+                    values.Add(new double[maxDataCount]);
+                    times.Add(new double[maxDataCount]);
+
+                    // Add stream to plots
+                    ScottPlot.Plottable.SignalPlotXY csp = new ScottPlot.Plottable.SignalPlotXY();
+                    csp.LineStyle = ScottPlot.LineStyle.Dash;
+                    csp.MarkerShape = ScottPlot.MarkerShape.none;
+                    csp = plot.Plot.AddSignalXY(times.Last(), values.Last());
+                    csp.Label = calcStream.getName();
+                    signalPlots.Add(csp);
+                }                
+
             } else if (p == null)
             {
                 foreach (Phidget phidget in phidgets)
@@ -975,7 +1033,7 @@ namespace ECB_Testing_Program
                     int n = 0;
                     foreach (PhidgetStream pStream in all_streams)
                     {
-                        if (p.ChannelClass == ChannelClass.DigitalOutput && isSame(p, pStream.phidget)) // Identify what stream has changed voltage
+                        if (p.ChannelClass == ChannelClass.DigitalOutput && pStream.getName() != "Calculated Tank Pressure" && isSame(p, pStream.phidget)) // Identify what stream has changed voltage
                         {
                             TimeSpan duration = DateTime.Now - startTime;
                             if (p.State)
@@ -1142,13 +1200,13 @@ namespace ECB_Testing_Program
         private string buildCSV(List<ScottPlot.Plottable.SignalPlotXY> signalPlots)
         {
             string toReturn= string.Empty;
-            int numCols = signalPlots.Count + 1;
+            int numCols = signalPlots.Count + 2;
             // Create the collumn hedders
-            for (int n = 0; n < signalPlots.Count; n++)
+            for (int n = 0; n <= signalPlots.Count; n++)
             {
-                if (n == signalPlots.Count - 1)
+                if (n == signalPlots.Count) //- 1
                 {
-                    toReturn += signalPlots[n].Label + " (Times)," + signalPlots[n].Label + " (Values)\n";
+                    toReturn += "Equation: " + txbEquation.Text.Replace("= ", "") + "\n"; //signalPlots[n].Label + " (Times)," + signalPlots[n].Label + " (Values)
                 }
                 else
                 {
@@ -1766,6 +1824,114 @@ namespace ECB_Testing_Program
                 setSavedCalibrations();
             }
         }
-    }
 
+        private void txbEquation_KeyDown(object sender, KeyEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            // Find the numberber of charicters in the each factor
+            string[] values = getEquationVariables(textBox.Text);
+            int[] startPositions = { 2, 2 + values[0].Length + 9, 2 + values[0].Length + 9 + values[1].Length + 9 };
+            
+            // Find position of curser
+            
+            // Logical test
+            bool isNum = ((e.KeyValue >= 48 && e.KeyValue <= 57) || e.KeyCode == Keys.OemPeriod || e.KeyCode == Keys.OemMinus);
+            bool isArroow = (e.KeyCode == Keys.Left || e.KeyCode == Keys.Right);
+            bool isRemove = (e.KeyCode == Keys.Delete || e.KeyCode == Keys.Back);
+            decimal num = 0;  // Not used
+            bool isNumSelected = decimal.TryParse(textBox.SelectedText, out num);
+
+            if (isNum)  // Allow numbers and period only in input zones
+            {
+                if (isNumSelected)
+                {
+                    return;
+                } 
+                else if ((textBox.SelectionStart >= startPositions[0] && textBox.SelectionStart <= startPositions[0] + values[0].Length) || (textBox.SelectionStart >= startPositions[1] && textBox.SelectionStart <= startPositions[1] + values[1].Length) || (textBox.SelectionStart >= startPositions[2] && textBox.SelectionStart <= startPositions[2] + values[2].Length))
+                {
+                    return;
+                }
+                else 
+                { 
+                    e.SuppressKeyPress = true;
+                }
+            } 
+            else if (isArroow)  // Allow arrows anywhere
+            {
+                return;
+            } 
+            else if (isRemove)  // Allow deleate and backsbace in safe zone but not at edge, and only if selected text is numeric
+            {
+                if (isNumSelected)
+                {
+                    return;
+                }
+                else if (e.KeyCode == Keys.Back)
+                {
+                    if ((textBox.SelectionStart > startPositions[0] && textBox.SelectionStart <= startPositions[0] + values[0].Length) || (textBox.SelectionStart > startPositions[1] && textBox.SelectionStart <= startPositions[1] + values[1].Length) || (textBox.SelectionStart > startPositions[2] && textBox.SelectionStart <= startPositions[2] + values[2].Length))
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        e.SuppressKeyPress = true;
+                    }
+                }
+                else if (e.KeyCode == Keys.Delete)
+                {
+                    if ((textBox.SelectionStart >= startPositions[0] && textBox.SelectionStart < startPositions[0] + values[0].Length) || (textBox.SelectionStart >= startPositions[1] && textBox.SelectionStart < startPositions[1] + values[1].Length) || (textBox.SelectionStart >= startPositions[2] && textBox.SelectionStart < startPositions[2] + values[2].Length))
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        e.SuppressKeyPress = true;
+                    }
+                }
+                else
+                {
+                    e.SuppressKeyPress = true;
+                }
+            }
+            else
+            {
+                e.SuppressKeyPress = true;
+            }
+        }
+        private string[] getEquationVariables(string equation)
+        {
+            double[] returnVal = { 1, 2, 3};
+            equation = equation.Replace("= ", ""); // Remoce leading equals
+            equation = equation.Replace(" * P_d + ", ",");  // add firest comma
+            equation = equation.Replace(" * P_s + ", ",");  // add secound comma
+            string[] strVals = equation.Split(',');  // Split at commas
+            return strVals;
+        }
+
+        private double[] getEquationValues(string equation)
+        {
+            double[] returnVal = { 1, 2, 3 };
+            equation = equation.Replace("= ", ""); // Remoce leading equals
+            equation = equation.Replace(" * P_d + ", ",");  // add firest comma
+            equation = equation.Replace(" * P_s + ", ",");  // add secound comma
+            string[] strVals = equation.Split(',');  // Split at commas
+            // convert strings to doubles
+            try { returnVal[0] = double.Parse(strVals[0]); }
+            catch { returnVal[0] = 0; }
+
+            try { returnVal[1] = double.Parse(strVals[1]); }
+            catch { returnVal[1] = 0; }
+
+            try { returnVal[2] = double.Parse(strVals[2]); }
+            catch { returnVal[2] = 0; }
+
+            return returnVal;
+        }
+
+        private void txbEquation_TextChanged(object sender, EventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            Properties.Settings.Default.equation = textBox.Text;
+        }
+    }
 }

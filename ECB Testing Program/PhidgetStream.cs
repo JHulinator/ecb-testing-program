@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Phidget22;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace ECB_Testing_Program
 {
@@ -85,6 +86,14 @@ namespace ECB_Testing_Program
         {
             // Convert to the approperate units by using y = m*x + b
             values.Add(gain * value + offset);
+            times.Add(time);
+            val = values.ToArray();
+            t = times.ToArray();
+        }
+        public void addCaculatedPoint(double time, double variable1, double variable2, double c1, double c2, double c3)
+        {
+            // Convert to the approperate units by using y = c1 * v1 + c2 * v2 + c3
+            values.Add(c1*variable1 + c2*variable2 + c3);
             times.Add(time);
             val = values.ToArray();
             t = times.ToArray();
